@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
             adapter = adapterRecyclerViewNoCapturados
         }
 
-        binding.ivAgragar.setOnClickListener {
+        binding.ivAgregar.setOnClickListener {
             val nombrePokemon = binding.etNombrePokemonAgregar.text.toString().trim().capitalize()
             if(nombrePokemon == ""){
                 Toast.makeText(this, "Introduce nombre del pokemon", Toast.LENGTH_LONG).show()
@@ -94,5 +94,5 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
             adapterRecyclerViewCapturados.notifyDataSetChanged()
         }
     }
-    
+
 }
