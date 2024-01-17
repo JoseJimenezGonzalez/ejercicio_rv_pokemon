@@ -2,6 +2,7 @@ package com.example.myapplication
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.databinding.ActivityMainBinding
 
@@ -11,6 +12,8 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
 
     private lateinit var adapterRecyclerViewCapturados: AdapterRecyclerView
     private lateinit var adapterRecyclerViewNoCapturados: AdapterRecyclerView
+    private lateinit var listaPokemonCapturados: MutableList<Pokemon>
+    private lateinit var listaPokemonNoCapturados: MutableList<Pokemon>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,8 +39,8 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
             Pokemon("Entei", false),
         )
 
-        val listaPokemonCapturados = mutableListOf<Pokemon>()
-        val listaPokemonNoCapturados = mutableListOf<Pokemon>()
+        listaPokemonCapturados = mutableListOf<Pokemon>()
+        listaPokemonNoCapturados = mutableListOf<Pokemon>()
         listaPokemon.forEach { pokemon ->
             if(pokemon.capturado){
                 listaPokemonCapturados.add(pokemon)
@@ -58,14 +61,38 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = adapterRecyclerViewNoCapturados
         }
+
+        binding.ivAgragar.setOnClickListener {
+            val nombrePokemon = binding.etNombrePokemonAgregar.text.toString().trim().capitalize()
+            if(nombrePokemon == ""){
+                Toast.makeText(this, "Introduce nombre del pokemon", Toast.LENGTH_LONG).show()
+            }else{
+                val estaCapturado = false
+                val pokemon = Pokemon(nombrePokemon, estaCapturado)
+                listaPokemonNoCapturados.add(pokemon)
+                adapterRecyclerViewNoCapturados.notifyItemInserted(listaPokemonNoCapturados.size - 1)
+                binding.etNombrePokemonAgregar.setText("")
+            }
+        }
     }
 
     override fun onItemClick(pokemon: Pokemon) {
-        val estaSeleccionado = pokemon.capturado
-        if(estaSeleccionado){
 
-        }else{
+        val estaCapturado = pokemon.capturado
 
+        if (estaCapturado) {
+            pokemon.capturado = false
+            listaPokemonCapturados.remove(pokemon)
+            listaPokemonNoCapturados.add(pokemon)
+            adapterRecyclerViewCapturados.notifyItemRemoved(listaPokemonCapturados.indexOf(pokemon))
+            adapterRecyclerViewNoCapturados.notifyItemInserted(listaPokemonNoCapturados.size - 1)
+        } else {
+            pokemon.capturado = true
+            listaPokemonCapturados.add(pokemon)
+            listaPokemonNoCapturados.remove(pokemon)
+            adapterRecyclerViewNoCapturados.notifyItemRemoved(listaPokemonNoCapturados.indexOf(pokemon))
+            adapterRecyclerViewCapturados.notifyItemInserted(listaPokemonCapturados.size - 1)
         }
     }
+
 }
