@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val listaPokemon = mutableListOf<Pokemon>(
+        val listaPokemon = mutableListOf(
             Pokemon("Pikachu", false),
             Pokemon("Raichu", false),
             Pokemon("Chicorita", false),
@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
                 val estaCapturado = false
                 val pokemon = Pokemon(nombrePokemon, estaCapturado)
                 listaPokemonNoCapturados.add(pokemon)
-                adapterRecyclerViewNoCapturados.notifyItemInserted(listaPokemonNoCapturados.size - 1)
+                adapterRecyclerViewNoCapturados.notifyDataSetChanged()
                 binding.etNombrePokemonAgregar.setText("")
             }
         }
@@ -84,15 +84,15 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
             pokemon.capturado = false
             listaPokemonCapturados.remove(pokemon)
             listaPokemonNoCapturados.add(pokemon)
-            adapterRecyclerViewCapturados.notifyItemRemoved(listaPokemonCapturados.indexOf(pokemon))
-            adapterRecyclerViewNoCapturados.notifyItemInserted(listaPokemonNoCapturados.size - 1)
+            adapterRecyclerViewCapturados.notifyDataSetChanged()
+            adapterRecyclerViewNoCapturados.notifyDataSetChanged()
         } else {
             pokemon.capturado = true
             listaPokemonCapturados.add(pokemon)
             listaPokemonNoCapturados.remove(pokemon)
-            adapterRecyclerViewNoCapturados.notifyItemRemoved(listaPokemonNoCapturados.indexOf(pokemon))
-            adapterRecyclerViewCapturados.notifyItemInserted(listaPokemonCapturados.size - 1)
+            adapterRecyclerViewNoCapturados.notifyDataSetChanged()
+            adapterRecyclerViewCapturados.notifyDataSetChanged()
         }
     }
-
+    
 }
